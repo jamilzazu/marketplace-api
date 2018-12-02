@@ -13,7 +13,7 @@ O projeto possui duas branchs, são:
 
 O ambiente de desenvolvimento foi configurado com .editorconfig + eslint.<br>
 Para isso, na raiz do projeto foi criado o arquivo .editorconfig com algumas configurações do editor. <br>
-Depois foi instalado o eslint `yarn add eslit`. Logo após a instalação o eslint precisa ser configurado `npx eslint --init`, onde foi selecionado as opções <b>user a popular style guide, standard e JSON</b>.<br>
+Depois foi instalado o eslint `yarn add eslit`. Logo após a instalação o eslint precisa ser configurado `npx eslint --init`, onde foi selecionado as opções <b>user a popular style guide, standard e JSON</b>.
 
 ## Configurado o servidor
 
@@ -54,4 +54,16 @@ server.listen(3000 || process.env.PORT);
 ### Banco de dados
 
 Após configurar o ambiente, o banco de dados foi instalado e configurado com Docker utilizando a imagem mongo `sudo docker run --name mongonode -p 27017:27017 -d -t mongo`. <br>
-Feito isso, temos um banco de dados rodando na porta 27017.
+Feito isso, temos um banco de dados rodando na porta 27017. <br>
+Para manipulação do banco de dados pela aplicação, está sendo utilizado o ORM mongoose `yarn add mongoose`. <br>
+Feito isso, em ./src/config foi criado o arquivo database.js, que contém a string de conexão com o banco. Esse arquivo foi importado no server.js para configuração do mongoose. <br>
+A conexão com o mongo esrá sendo feita pelo mongoose. Para isso o mongoose deve ser importado no server.js e configurado da seguinte forma:
+
+```javascript
+database () {
+    mongoose.connect(databaseConfig.uri, {
+        useCreateIndex: true,
+        useNewUrlParser: true
+    })
+}
+```
