@@ -2,17 +2,16 @@ const express = require('express')
 const routes = express.Router()
 
 // Controllers
-const UserController = require('./app/controllers/UserController')
-const SessionController = require('./app/controllers/SessionController')
+const controllers = require('./app/controllers')
 
 // Middlewares
 const authMiddleware = require('./app/middlewares/auth')
 
 // User routes
-routes.post('/users', UserController.store)
+routes.post('/users', controllers.UserController.store)
 
 // Auth
-routes.post('/sessions', SessionController.store)
+routes.post('/sessions', controllers.SessionController.store)
 routes.get('/teste', authMiddleware, (req, res) => {
   return res.json({ ok: true })
 })
