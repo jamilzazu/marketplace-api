@@ -56,8 +56,8 @@ server.listen(3000 || process.env.PORT);
 Após configurar o ambiente, o banco de dados foi instalado e configurado com Docker, utilizando a imagem mongo `sudo docker run --name mongonode -p 27017:27017 -d -t mongo`. <br>
 Feito isso, temos um banco de dados rodando na porta 27017. <br>
 Para manipulação do banco de dados pela aplicação, está sendo utilizado o ORM mongoose `yarn add mongoose`. <br>
-Feito isso, em ./src/config foi criado o arquivo database.js, que contém a string de conexão com o banco. Esse arquivo foi importado no server.js para configuração do mongoose. <br>
-A conexão com o mongo esrá sendo feita pelo mongoose. Para isso o mongoose deve ser importado no server.js e configurado da seguinte forma:
+Feito isso, em ./src/config foi criado o arquivo database.js, que contém a string de conexão com o banco. <br>
+A conexão com o mongo é feita pelo mongoose. Para isso o mongoose deve ser importado no server.js e configurado da seguinte forma:
 
 ```javascript
 database () {

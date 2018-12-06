@@ -7,13 +7,25 @@ const controllers = require('./app/controllers')
 // Middlewares
 const authMiddleware = require('./app/middlewares/auth')
 
-// User routes
+/**
+ * User
+ */
 routes.post('/users', controllers.UserController.store)
 
-// Auth
+/**
+ * Auth
+ */
 routes.post('/sessions', controllers.SessionController.store)
-routes.get('/teste', authMiddleware, (req, res) => {
-  return res.json({ ok: true })
-})
+
+routes.use(authMiddleware) // Todas as rotas posterior ao authmiddlewares necessitam de autenticação
+
+/**
+ * Ads
+ */
+routes.get('/ads', controllers.AdController.index)
+routes.get('/ads/:id', controllers.AdController.show)
+routes.post('/ads', controllers.AdController.store)
+routes.put('/ads/:id', controllers.AdController.udpate)
+routes.delete('/ads/:id', controllers.AdController.destroy)
 
 module.exports = routes
