@@ -1,4 +1,4 @@
-const Ad = require('../models/Add')
+const Ad = require('../models/Ad')
 
 class AdController {
   async index (req, res) {

@@ -126,7 +126,7 @@ Para mais, consultar a documentação no arquivo `./app/middlewares/auth.js`.
 
 ### Paginação
 
-Trazer todos os dados de uma collectioon pode resultar em problemas quando se tem uma grande quantidade de dados. Por isso, para paginar a aplicação foi utilizado o `mongoose-paginate`. <br>
+Trazer todos os dados de uma collection pode resultar em problemas quando se tem uma grande quantidade de dados. Por isso, para paginar a aplicação foi utilizado o `mongoose-paginate`. <br>
 Basta instalar `yarn add mongoose-paginate`, ir na model que deseja paginar, no caso Ad, importar e adicionar o `mongoose-paginate`.
 
 ```javascript
@@ -162,4 +162,4 @@ class AdController {
 }
 ```
 
-Para mais informações sobre a lib, consulte a [https://github.com/edwardhotchkiss/mongoose-paginate](documentação)
+Para mais informações sobre a lib, consulte a [documentação](https://github.com/edwardhotchkiss/mongoose-paginate)
