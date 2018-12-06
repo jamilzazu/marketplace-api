@@ -123,3 +123,43 @@ module.exports = async (req, res, next) => {
 ```
 
 Para mais, consultar a documentação no arquivo `./app/middlewares/auth.js`.
+
+### Paginação
+
+Trazer todos os dados de uma collectioon pode resultar em problemas quando se tem uma grande quantidade de dados. Por isso, para paginar a aplicação foi utilizado o `mongoose-paginate`. <br>
+Basta instalar `yarn add mongoose-paginate`, ir na model que deseja paginar, no caso Ad, importar e adicionar o `mongoose-paginate`.
+
+```javascript
+const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate");
+
+const AdSchema = new mongoose.Schema();
+
+AdSchema.plugin(mongoosePaginate);
+
+module.exports = mongoose.model("Ad", AdSchema);
+```
+
+Feito isso, nas próximas requisições, podemos utilizar os métodos do mongoose-paginate da seguinte forma:
+
+```javascript
+class AdController {
+  async index(req, res) {
+    const ads = await Ad.paginate(
+      {
+        /* FILTROS DO FIND()*/
+      },
+      {
+        limit: 20, // Limite por página
+        page: req.query.page || 1, // A pagima atual, normalmente vem em query.params
+        sort: "-createdAt", // Ordenação dos dados
+        populate: "author" // Para popular os relacionamentos da collection
+      }
+    );
+
+    return res.json(ads);
+  }
+}
+```
+
+Para mais informações sobre a lib, consulte a [https://github.com/edwardhotchkiss/mongoose-paginate](documentação)
