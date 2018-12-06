@@ -67,3 +67,59 @@ database () {
     })
 }
 ```
+
+### Criptografia da senha
+
+Foi adicionado um hook na model User para criptografar a senha do usuário antes de ser salva no banco. Para a criptografia, foi utilizado o bcryptjs. <br>
+Obs. Hooks são operações realizadas na model antes que os dados sejam salvos, atualizdos, criados e/ou deletados do banco.<br>
+
+```javascript
+UserSchema.pre("save", async function(next) {
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 8);
+});
+```
+
+### Autenticação
+
+A Autenticação foi feita utilizando JWT(Json Web Token). Para isso, foi adicionado a controller SessionController e o método store(). <br>
+Na model User, foi adicionado 2 métodos, são eles:
+
+- compareHash: Método chamado para validar a senha na autenticação do usuário.
+- generateToken: Caso o usuário passe na validação de e-mail e senha, é chamado o méotod generateToken({ user.id }), para retornar um token válido. O método é estático, por isso não necessita de uma instância da Classe User.
+
+### Auth Middleware
+
+Para controlar as rotas seguras da aplicação, está sendo utilizado o auth middleware. <br>
+Aqui, básicamente ele recebe o token via header, captura o token e o valida. <br>
+Obs. Foi utilizado o `{ promisify } = require('util')` para transformar o jwt.verify em uma promisse, permitindo o uso do async await.
+
+```javascript
+const jwt = require("jsonwebtoken");
+const authConfig = require("../../config/auth");
+
+const { promisify } = require("util");
+
+module.exports = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ error: "Token not provided" });
+  }
+
+  const [, token] = authHeader.split(" ");
+
+  try {
+    const decoded = await promisify(jwt.verify)(token, authConfig.secret);
+
+    req.userId = decoded.id;
+
+    return next();
+  } catch (err) {
+    return res.status(401).json({ error: "Token invalid" });
+  }
+};
+```
+
+Para mais, consultar a documentação no arquivo `./app/middlewares/auth.js`.

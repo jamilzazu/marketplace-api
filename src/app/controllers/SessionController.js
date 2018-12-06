@@ -1,6 +1,7 @@
 const User = require('../models/User')
 
 class SessionController {
+  // Valida email, senha e retorna o token caso o user se autentique com os dados corretos
   async store (req, res) {
     const { email, password } = req.body
 
