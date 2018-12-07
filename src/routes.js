@@ -28,4 +28,9 @@ routes.post('/ads', controllers.AdController.store)
 routes.put('/ads/:id', controllers.AdController.udpate)
 routes.delete('/ads/:id', controllers.AdController.destroy)
 
+/**
+ * Purchase
+ */
+routes.post('/purchase', controllers.PurchaseController.store)
+
 module.exports = routes
