@@ -9,7 +9,7 @@ class PurchaseController {
     // Verifica se o item existe no banco de dados
     const purchaseAd = await Ad.findById(ad).populate('author')
     const user = await User.findById(req.userId)
-    console.log(purchaseAd)
+
     Mail.sendMail({
       from: '"Maicon Silva" <maiconrs95@gmail.com>',
       to: purchaseAd.author.email,

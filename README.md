@@ -163,3 +163,41 @@ class AdController {
 ```
 
 Para mais informações sobre a lib, consulte a [documentação](https://github.com/edwardhotchkiss/mongoose-paginate)
+
+### Envio de e-mail
+
+Para envio de email está sendo utilizado o `nodemailer` + MailTrap. O MailTrap é um servidor SMTP onde todos os e-mails enviados caem na mesma caixa de entrada, usado em ambinete de desenvolvimento. Para produção, deve ser configurado um servidor externo como g-mail, mandril, Amazon Sas, ParkPost etc. <br>
+Para utilizar o nodemail, bastar instalar `yarn add nodemailer` e configura-lo como serviço:
+
+```javascript
+const nodemailer = require("nodemailer");
+
+const transport = nodemailer.createTransport(
+  host: 'smtp.mailtrap.io',
+  port: '2525',
+  secure: false,
+  auth: {
+    user: '5a48bf600d3043',
+    pass: 'e6dffb5e723c4d'
+  }
+});
+
+module.exports = transport;
+```
+
+Para manter a organização do código, a configuração do método createTransport() pode ficar em um arquivo externo. <br>
+Feito a configuração do nodemailer, basta importa-lo e utilizar seus métodos em uma controller, exemplo:
+
+```javascript
+// tranport
+const Mail = require("../services/Mail");
+
+Mail.sendMail({
+  from: '"Maicon Silva" <email@email.com>',
+  to: "com@com.br",
+  subject: "Solicitação de compra",
+  html: "<p>Test</p>"
+});
+```
+
+### Template de e-mail
