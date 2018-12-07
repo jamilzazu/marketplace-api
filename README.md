@@ -210,7 +210,6 @@ A configuração de template possui duas dependências, são elas:
 Após instalar as duas dependências, basta importa-las no arquivo de serviço do email `Mail.js` e configurar da seguinte forma:
 
 ```javascript
-// Configura o template do e-mail
 const path = require("path");
 const hbs = require("nodemailer-express-handlebars");
 const exphbs = require("express-handlebars");
@@ -228,7 +227,7 @@ transport.use(
 );
 ```
 
-Feito isso, na controller que enviará o e-mail, é necessário passar mais alguns parametros, ficando assim:
+Feito isso, na controller que enviará o e-mail, é necessário passar mais alguns parâmetros, ficando assim:
 
 ```javascript
 Mail.sendMail({
