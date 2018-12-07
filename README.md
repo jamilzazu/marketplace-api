@@ -201,3 +201,43 @@ Mail.sendMail({
 ```
 
 ### Template de e-mail
+
+A configuração de template possui duas dependências, são elas:
+
+- `nodemailer-express-handlebars`: Configurações do nodemailer
+- `express-handlebars`: View engine
+
+Após instalar as duas dependências, basta importa-las no arquivo de serviço do email `Mail.js` e configurar da seguinte forma:
+
+```javascript
+// Configura o template do e-mail
+const path = require("path");
+const hbs = require("nodemailer-express-handlebars");
+const exphbs = require("express-handlebars");
+
+const transport = nodemailer.createTransport(mailConfig);
+
+// Configurações do template
+transport.use(
+  "compile",
+  hbs({
+    viewEngine: exphbs(), // ViewEngine
+    viewPath: path.resolve(__dirname, "..", "views", "emails"), // Caminho das Views
+    extName: ".hbs" // Extensão das Views
+  })
+);
+```
+
+Feito isso, na controller que enviará o e-mail, é necessário passar mais alguns parametros, ficando assim:
+
+```javascript
+Mail.sendMail({
+  from: '"Maicon Silva" <maiconrs95@gmail.com>',
+  to: purchaseAd.author.email,
+  subject: `Solicitação de compra: ${purchaseAd.title}`,
+  template: "purchase", // Nome da View
+  context: { user, content, ad: purchaseAd } // Variáveis de template
+});
+
+return res.send();
+```

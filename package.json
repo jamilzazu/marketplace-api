@@ -9,10 +9,12 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.16.4",
+    "express-handlebars": "^3.0.0",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.3.14",
     "mongoose-paginate": "^5.0.3",
     "nodemailer": "^4.7.0",
+    "nodemailer-express-handlebars": "^3.0.0",
     "require-dir": "^1.2.0"
   },
   "devDependencies": {
