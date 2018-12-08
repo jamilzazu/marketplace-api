@@ -240,3 +240,80 @@ Mail.sendMail({
 
 return res.send();
 ```
+
+### Configurando a fila
+
+Para que o usuário não necessite aguardar a reposta do envio do e-mail, que pode levar alguns segundos, foi implementando a fila. A fila uma operação que irá ser executada em segundo plano e quando estiver completa retornará uma resposta. Para isso vamos utilizar o redis, também através do docker `sudo docker run --name noderedis -p 6379:6379 redis:alpine`. <br>
+O redis básicamente funciona com chaves que representam processos e quando "chamadas" executam um processo. <br>
+Para configurar o redis é necessário kue `yarn add kue`. <br>
+Feito isso vamos configura-lo:
+
+A pirmeira coisa é remover o envio de e-mail do PurchaseController e passar para um job `jobs/PurchaseMail.js`.
+Jobs serão operações executadas em segundo plano:
+
+```javascript
+const Mail = require("../services/Mail");
+
+// Job reponsável por enviar o email
+class PurchaseMail {
+  // Retorna a chave única do redis
+  get keyof() {
+    return "PurchaseMail ";
+  }
+
+  // Serviço responsável por enviar o email
+  // job recebe todos os valores que serão passados para o job
+  // done é chamado quando o processo é concluído
+  async handle(job, done) {
+    const { ad, user, content } = job.data;
+
+    Mail.sendMail({
+      from: '"Maicon Silva" <maiconrs95@gmail.com>',
+      to: ad.author.email,
+      subject: `Solicitação de compra: ${ad.title}`,
+      template: "purchase",
+      context: { user, content, ad }
+    });
+
+    return done();
+  }
+}
+
+module.exports = new PurchaseMail();
+```
+
+Feito isso, nós criamos as chamadas de processos, passando o nome da fila e o processo a ser executado:
+
+```javascript
+const kue = require("kue");
+const redisConfig = require("../../config/redis");
+const jobs = require("../jobs");
+
+const Queue = kue.createQueue({
+  redis: {
+    host: "127.0.0.1",
+    port: 6379
+  }
+});
+
+/**
+ * @description:  Inicia o processo redis passando a key é o método chamado
+ * Todos os processos que tiverem a mesma key serão iniciados na chamada
+ */
+Queue.process(jobs.PurchaseMail.key, jobs.PurchaseMail.handle);
+
+module.exports = Queue;
+```
+
+Agora, em PurchaseController basta chamar o processo passando as váriaves com os valores do template:
+
+```javascript
+// Executa e salva o job no redis
+Queue.create(PurchaseMail.key, {
+  ad: { obj, data },
+  user: "User",
+  content: "Content"
+}).save();
+```
+
+É isso. Para mais consulte os arquivos da pasta jobs.
