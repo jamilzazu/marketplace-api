@@ -248,7 +248,7 @@ O redis básicamente funciona com chaves que representam processos e quando "cha
 Para configurar o redis é necessário kue `yarn add kue`. <br>
 Feito isso vamos configura-lo:
 
-A pirmeira coisa é remover o envio de e-mail do PurchaseController e passar para um job `jobs/PurchaseMail.js`.
+A pirmeira coisa foi remover o envio de e-mail do PurchaseController e passar a responsábilidade para um job `jobs/PurchaseMail.js`.
 Jobs serão operações executadas em segundo plano:
 
 ```javascript
@@ -317,3 +317,40 @@ Queue.create(PurchaseMail.key, {
 ```
 
 É isso. Para mais consulte os arquivos da pasta jobs.
+
+### Validações
+
+Para validar os campos dos Schemas, foi utilizado a lib `yarn add joi`. Ela basicamente reflete o Schema e valida os campos que não estão preenchidos corretamente. <br>
+Na utlização do Joi nós podemos validar tanto o body, params o os query params:
+
+```javascript
+const Joi = require("joi");
+
+/**
+ * @description: O Joi permite tanto a validação do body, params e query params
+ */
+module.exports = {
+  body: {
+    name: Joi.string().required(),
+    email: Joi.string()
+      .email()
+      .required(),
+    password: Joi.strict()
+      .required()
+      .min(6)
+  }
+};
+```
+
+Para utilizar o Joi nas validações, é necessário a instalação do middleware express-validation `yarn add express-validation`. <br>
+Feito isso, basta importar o express-validation e as validações feito pelo Joi no arquivo de rotas e configura-los como middleware da seguinte forma:
+
+```javascript
+const validate = require("express-validation");
+const validators = require("./app/validators");
+
+/**
+ * User
+ */
+routes.post("/users", validate(validators.User), sua.controller);
+```
