@@ -354,3 +354,46 @@ const validators = require("./app/validators");
  */
 routes.post("/users", validate(validators.User), sua.controller);
 ```
+
+### Exception Handling
+
+As exception mostrará todos os possíveis erros na API. Para isso foi criado um método em Server.js que contém as configurações de error. <br>
+Obs. Para que a exception capture os erros nas rotas, o método exception() deve ser chamado depois do routes(). <br>
+Como utilizamos o express-validation nas models, a API pode lançar um erro vindo dessa lib. <br>
+Para manipular essa exceção, basta validar no middleware que irá capturar os error da API, se o erro lançado é uma instância do express-validation:
+
+```javascript
+  const validator = require('express-validation')
+  exception () {
+    this.express.use((err, req, res, next) => {
+      // Valida se o erro lançado é uma instância do express-validation
+      if (err instanceof validatior.ValidationError) {
+        return res.status(err.status).json(err)
+      }
+    })
+  }
+```
+
+Para ter um acesso mais detalhado sobre o erro em ambiente de dev, foi utilizado a lib youch `yarn add youch`. <br>
+Essa lib, básicamente, funciona como um formatador de erros. <br>
+Como os métodos das controllers estão declarados com async, eles passam a ser uma Promisse. E com isso, não irão disparar um erro a não ser que estejam em volto de um try catch(err). Para passar os erros dos métodos para o express, foi adicionado a lib express-async-handler. <br>
+Após a instalação da lib, basta adiciona-lá no arquivo de rotas e envolver a chamada das controllers na variável de import da lib:
+
+```javascript
+const handler = require("express-async-handler");
+routes.delete("/ads/:id", handler(controllers.AdController.destroy));
+```
+
+E agora no método exception() em server.js é possível lançar as exceções utilizando o Youch.
+
+```javascript
+// Verifica se estamos em ambiente de desenvolvimento
+if (process.env.NODE_ENV !== "production") {
+  const youch = new Youch(err, req);
+
+  return res.json(await youch.toJSON());
+  //return res.send(await youch.toHTML());
+}
+```
+
+Para mais, consultar os arquivos routes.js e/ou Server.js
