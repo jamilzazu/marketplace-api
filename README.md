@@ -470,4 +470,7 @@ module.exports = {
 };
 ```
 
-É isso. :blush:
+É isso. :heart:
+
+Se você chegou até aqui é porque deve estar interessado no meu trabalho. Não perca tempo, entre em contato. <br>
+para mais informações > [Maicon](https://maiconrs95.github.io/me/)
