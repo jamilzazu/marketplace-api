@@ -6,6 +6,7 @@ const PurchaseMail = require('../jobs/PurchaseMail')
 const Queue = require('../services/Queue')
 
 class PurchaseController {
+  // Salva uma nova intenção de compra e envia e-mail para o anunciante
   async store (req, res) {
     const { ad, content } = req.body
 

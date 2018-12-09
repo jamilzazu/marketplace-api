@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate')
 
+// Anuncia um item - vendedor
 const AdSchema = new mongoose.Schema(
   {
     title: {
@@ -19,6 +20,10 @@ const AdSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: true
+    },
+    purchasedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
     },
     createdAt: {
       type: Date,

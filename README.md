@@ -15,7 +15,7 @@ O ambiente de desenvolvimento foi configurado com .editorconfig + eslint.<br>
 Para isso, na raiz do projeto foi criado o arquivo .editorconfig com algumas configurações do editor. <br>
 Depois foi instalado o eslint `yarn add eslit`. Logo após a instalação o eslint precisa ser configurado `npx eslint --init`, onde foi selecionado as opções <b>user a popular style guide, standard e JSON</b>.
 
-## Configurado o servidor
+### Configurado o servidor
 
 O servidor <b>./src/server.js</b> possui a classe app, responsável por iniciar as rotas e middlewares do server:
 

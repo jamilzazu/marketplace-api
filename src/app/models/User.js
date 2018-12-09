@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const authConfig = require('../../config/auth')
 
+// Usuários do sistema
 const UserSchema = new mongoose.Schema(
   {
     name: {
