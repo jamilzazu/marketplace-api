@@ -397,3 +397,34 @@ if (process.env.NODE_ENV !== "production") {
 ```
 
 Para mais, consultar os arquivos routes.js e/ou Server.js
+
+### Utilizando o Sentry
+
+O Sentry é uma plataforma utilizada para capturar erros em produção, evitando que os usuários do sistema entrem ou percebam o erro. <br>
+Toda vez que a API lançar um erro, esse erro é enviado para o Sentry.
+[+Sentry](https://docs.sentry.io/)
+
+Após seguir a documentação, instalado o Sentry `yarn add @sentry/node`, basta importa-lo e configurar o express() para receber os erros e enviar para o Sentry em ambiente de produção:
+
+```javascript
+const Sentry = require('@sentry/node')
+
+  sentry () {
+    Sentry.init({ dsn: 'https://a849399c2e534922b14f568b3dee5ae0@sentry.io/1340291' })
+  }
+
+  exception () {
+  // Valida erros em produção
+    if (process.env.NODE_ENV === 'production') {
+      this.express.use(Sentry.Handlers.errorHandler())
+    }
+    ...
+  }
+```
+
+Também é possível utilizar o sentry em filas, como no envio de e-mail. Basta importar o Sentry no service e configurar o Queue:
+
+```javascript
+const Sentry = require("@sentry/node");
+Queue.on("error", Sentry.captureException);
+```
