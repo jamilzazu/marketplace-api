@@ -428,3 +428,46 @@ Também é possível utilizar o sentry em filas, como no envio de e-mail. Basta 
 const Sentry = require("@sentry/node");
 Queue.on("error", Sentry.captureException);
 ```
+
+### Variaveis de ambiente
+
+Variaveis de ambiente normalmente são diferentes em ambiente de produção x desenvolvimento. Para facilitar essa mudança, podemos centralizar a fonte desse valores, e altera-las dependendo do ambiente.
+Para isso, na raiz do projeto é necessário um arquivo .env, que contém os valores das variaveis dea ambiente:
+
+```javascript
+NODE_ENV = development
+APP_SECRET = GoNode2
+DB_URL = mongodb://localhost:27017/gonode03
+
+MAIL_HOST = smtp.mailtrap.io
+MAIL_PORT = 2505
+MAIL_USER = 5a48bf600d3043
+MAIL_PASS = e6dffb5e723c4d
+
+REDIS_HOST = 127.0.0.1
+REDIS_PORT = 6379
+
+SENTRY_DSN = https://a849399c2e534922b14f568b3dee5ae0@sentry.io/1340291
+```
+
+Feito isso, também é necessário a instalação da lib dotenv `yarn add dotenv`. <br>
+Depois de instalada, deve ser chamada em server.js acima de todos os imports, para que toda a aplicação enxergue as variaveis:
+
+```javascript
+require("dotenv").config(); // 1 linha do server.js
+
+const express = require("express");
+const mongoose = require("mongoose");
+const databaseConfig = require("./config/database");
+```
+
+Feito, todas as variaveis de ambiente ficam disponível em process.env.CHAVE, e podem ser usada na aplicação:
+
+```javascript
+module.exports = {
+  secret: process.env.APP_SECRET // CHAVE = valor setado no arquivo .env,
+  ttl: 86400
+};
+```
+
+É isso. :blush:

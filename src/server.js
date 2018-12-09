@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express')
 const mongoose = require('mongoose')
 const databaseConfig = require('./config/database')
@@ -21,7 +23,7 @@ class App {
 
   // Configurado antes de tudo para que toda a API seja monitorada pelo Sentry
   sentry () {
-    Sentry.init({ dsn: 'https://a849399c2e534922b14f568b3dee5ae0@sentry.io/1340291' })
+    Sentry.init({ dsn: process.env.SENTRY_DSN })
   }
 
   database () {
