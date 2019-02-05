@@ -11,15 +11,26 @@ const authMiddleware = require('./app/middlewares/auth')
 const validate = require('express-validation')
 const validators = require('./app/validators')
 
+routes.post('/test', (req, res) => {
+  res.status(200).send({ message: 'api online' })
+})
 /**
  * User
  */
-routes.post('/users', validate(validators.User), handler(controllers.UserController.store))
+routes.post(
+  '/users',
+  validate(validators.User),
+  handler(controllers.UserController.store)
+)
 
 /**
  * Auth
  */
-routes.post('/sessions', validate(validators.Session), handler(controllers.SessionController.store))
+routes.post(
+  '/sessions',
+  validate(validators.Session),
+  handler(controllers.SessionController.store)
+)
 
 routes.use(authMiddleware) // Todas as rotas posterior ao authmiddlewares necessitam de autenticação
 
@@ -28,8 +39,16 @@ routes.use(authMiddleware) // Todas as rotas posterior ao authmiddlewares necess
  */
 routes.get('/ads', handler(controllers.AdController.index))
 routes.get('/ads/:id', handler(controllers.AdController.show))
-routes.post('/ads', validate(validators.Ad), handler(controllers.AdController.store))
-routes.put('/ads/:id', validate(validators.Ad), handler(controllers.AdController.udpate))
+routes.post(
+  '/ads',
+  validate(validators.Ad),
+  handler(controllers.AdController.store)
+)
+routes.put(
+  '/ads/:id',
+  validate(validators.Ad),
+  handler(controllers.AdController.udpate)
+)
 routes.delete('/ads/:id', handler(controllers.AdController.destroy))
 
 /**

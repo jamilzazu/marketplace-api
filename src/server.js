@@ -11,6 +11,7 @@ const Sentry = require('@sentry/node')
 
 class App {
   constructor () {
+    console.log('online')
     this.express = express()
     this.isDev = process.env.NODE_ENV !== 'production'
 
