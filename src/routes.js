@@ -12,7 +12,7 @@ const validate = require('express-validation')
 const validators = require('./app/validators')
 
 routes.post('/test', (req, res) => {
-  res.status(200).send({ message: 'api online' })
+  return res.status(200).send({ message: 'api online' })
 })
 /**
  * User
