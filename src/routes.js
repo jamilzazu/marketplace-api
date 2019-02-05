@@ -11,7 +11,7 @@ const authMiddleware = require('./app/middlewares/auth')
 const validate = require('express-validation')
 const validators = require('./app/validators')
 
-routes.post('/test', (req, res) => {
+routes.get('/test', (req, res) => {
   return res.status(200).send({ message: 'api online' })
 })
 /**
